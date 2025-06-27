@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Primeira Página Web</title>
+    <title>Trabalho Uniasselvi</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,7 +21,54 @@
     </style>
 </head>
 <body>
-    <h1>Descubra seu signo</h1>
-    <p>Digite um numero de 1 a 12</p>
+    <h1>Gerador de senhas</h1>
+    <form id="form-senha" onsubmit="gerarSenha(); return false;">
+        <p>Quantos caracteres sua senha vai conter?</p>
+        <input type="number" id="qtd-caracteres" min="1" max="50" placeholder="Ex: 12" required style="width:100px;" />
+        <p>Deseja letras maiúsculas?</p>
+        <input type="checkbox" id="maiusculas" /> Sim
+        <p>Deseja letras minúsculas?</p>
+        <input type="checkbox" id="minusculas" /> Sim
+        <p>Deseja caracteres especiais?</p>
+        <input type="checkbox" id="especiais" /> Sim
+        <br><br>
+        <button type="submit">Gerar senha</button>
+    </form>
+    <div id="resultado" style="margin-top:20px;font-size:1.2em;"></div>
+    <div id="campo-copiar" style="display:none;margin-top:10px;">
+        <input type="text" id="senha-gerada" readonly style="width:250px;font-size:1.1em;text-align:center;" />
+        <button onclick="copiarSenha()" type="button">Copiar</button>
+    </div>
+    <script>
+        function gerarSenha() {
+            const qtd = parseInt(document.getElementById('qtd-caracteres').value);
+            const usarMaiusculas = document.getElementById('maiusculas').checked;
+            const usarMinusculas = document.getElementById('minusculas').checked;
+            const usarEspeciais = document.getElementById('especiais').checked;
+            let chars = '';
+            if (usarMaiusculas) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (usarMinusculas) chars += 'abcdefghijklmnopqrstuvwxyz';
+            if (usarEspeciais) chars += '!@#$%&*?';
+            if (chars === '') {
+                document.getElementById('resultado').textContent = 'Selecione pelo menos um tipo de caractere!';
+                document.getElementById('campo-copiar').style.display = 'none';
+                return;
+            }
+            let senha = '';
+            for (let i = 0; i < qtd; i++) {
+                senha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('resultado').textContent = 'Senha gerada:';
+            document.getElementById('senha-gerada').value = senha;
+            document.getElementById('campo-copiar').style.display = 'block';
+        }
+        function copiarSenha() {
+            const campo = document.getElementById('senha-gerada');
+            campo.select();
+            campo.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            alert('Senha copiada!');
+        }
+    </script>
 </body>
 </html>
